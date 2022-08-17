@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Checkout</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" type="text/css" rel="stylesheet">
+    <style>
+      #checkoutMethods {
+        background: #fff;
+        border-radius: 2px;
+        display: inline-block;
+        max-height: 700px;
+        margin: 1rem;
+        position: relative;
+        width: 700px;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+
+      }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+    <section>
+      <div class="col-md-8 col-xs-12">
+        <table class="table">
+          <tr>
+            <td><h4>Order Summary</h4></td>
+          </tr>
+          <tr>
+            <td>
+              {% for item in order.get_cart_items %}
+                <tr>
+                  <td>{{ item }}</td>
+                  <td>${{ item.product.price }}</td>
+                </tr>
+              {% endfor %}
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Order Total</strong> </td>
+            <td> <strong>${{ order.get_cart_total }}</strong></td>
+          </tr>
+          <tr>
+            <td>
+               <a href="{% url 'shopping_cart:update_records'  order.id %}" class="pull-right btn btn-primary">Proceed To Checkout</a>
+            </td>
+
+          </tr>
+        </table>
+      </div>
+    </section>
+  </div>
+</body>

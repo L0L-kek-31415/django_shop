@@ -1,0 +1,51 @@
+{% extends 'main/base.html' %}
+{% block title %}
+  {{ title }}
+{% endblock %}
+{% block content %}
+  <h1>Главная страница</h1>
+  <div class="conteiner" >
+    <div style="display: inline-block">
+      <form action="{% url "order" '1' %}">
+        <button type="submit" class="btn btn-success" style="float: left; margin-right: 15px">By Price</button>
+      </form>
+      <form action="{% url "order" '2' %}" >
+        <button type="submit" class="btn btn-success" style="float: left; margin-bottom: 15px">By Date</button>
+      </form>
+      <form action="{% url 'order' '3' %}" class="d-flex" method="post" style="float: right">
+        {% csrf_token %}
+        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="searched"></input>
+        <button class="btn btn-outline-secondary" type="submit">Search</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="conteiner">
+  {{ message }}
+  <div class="row">
+    {% for object in object_list %}
+        {% if object.is_published %}
+          <div class="alert alert-warning mt-2 col-sm-3" style="margin-bottom:5px; margin-right: 5px;">
+            <img src="../media/{{ object.photo }}" alt="" height="250px" style="width: 280px; height: 250px;object-fit: cover;">
+            <p style="font-size: 25px">{{ object.title }}</p>
+            <p>Price: {{ object.price }}</p>
+            <p>Category: {{ object.category }}</p>
+{#            <div style="font-size: 15px">#}
+{#              <p>Edit: {{ object.updated_at }}</p>#}
+{#            <p>Create: {{ object.create_at }}</p>#}
+{#            </div>#}
+            {%  if user.is_authenticated %}
+              {% if object.id in own  %}
+                You own this
+              {% elif object.id in current_order_products %}
+               <a href="{% url "cart" %}" class='btn btn-warning'>Go to Cart</a>
+              {% else %}
+                <a href="{% url "shopping_cart:add_to_cart" object.id %}" class='btn btn-warning'>Add to Cart</a>
+              {% endif %}
+            {% endif %}
+          </div>
+        {% endif %}
+    {% endfor %}
+  </div>
+  </div>
+{% endblock %}

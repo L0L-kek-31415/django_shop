@@ -1,0 +1,39 @@
+{% extends 'main/base.html' %}
+{% block title %}
+  Search
+{% endblock %}
+{% block content %}
+  <div class="conteiner">
+    <form action="{% url 'search' %}" class="d-flex" method="post">
+    <form action="{% url 'search' %}" class="d-flex" method="post">
+      {% csrf_token %}
+      <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="searched"></input>
+      <button class="btn btn-outline-secondary" type="submit">Search</button>
+    </form>
+  </div>
+  {{ message }}
+  <div class="row">
+    {% if object_list %}
+      {% for object in object_list %}
+          <div class="alert alert-warning mt-2 col-sm-3" style="margin-bottom:5px; margin-right: 5px;">
+            <img src="../media/{{ object.photo }}" alt="" height="250px" style="width: 280px; height: 250px;object-fit: cover;">
+            <p>{{ object.title }}</p>
+            <p>Price: {{ object.price }}</p>
+            {%  if user.is_authenticated %}
+              {% if object.id in own  %}
+                You own this
+              {% elif object.id in current_order_products %}
+               <a href="{% url "cart" %}" class='btn btn-warning'>Go to Cart</a>
+              {% else %}
+                <a href="{% url "shopping_cart:add_to_cart" object.id %}" class='btn btn-warning'>Add to Cart</a>
+              {% endif %}
+            {% endif %}
+          </div>
+      {% endfor %}
+    {% else %}
+      <br>
+      <h2>Nothing was found</h2>
+    {% endif %}
+  </div>
+
+{% endblock %}

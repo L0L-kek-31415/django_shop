@@ -1,0 +1,49 @@
+{% extends 'main/base.html' %}
+{% block title %}
+  My Cart
+{% endblock %}
+{% block content %}
+  <h1>Cart</h1>
+  {% if current_order_products %}
+    <div style="display: inline-block">
+    {% for object in current_order_products %}
+      {% if not object.product.is_ordered %}
+        <div class="row alert alert-warning mt-2">
+        <h3>{{ object.product.title }}</h3>
+        <p>Price: {{ object.product.price }}</p>
+        <a href="{% url 'shopping_cart:delete_from_cart' object.id %}" class="btn btn-warning pull-left">
+            delete
+          </a>
+      </div>
+      {% endif %}
+    {% endfor %}
+    </div>
+  {% else %}
+    <p>You have not added any items yet.</p>
+  {% endif %}
+  <table>
+      <tr>
+        {% if current_order_products.get_cart_total != None %}
+        <td colspan=2>
+          <strong class="pull-right">Order Total:</strong>
+        </td>
+
+        <td colspan= 1>
+          $<strong>{{ current_order_products.get_cart_total }}</strong>
+        </td>
+        {% endif %}
+      </tr>
+      <tr>
+        <td colspan=1 >
+          <a href="{% url 'home' %}" class="btn btn-warning pull-left">
+            Continue shopping
+          </a>
+        </td>
+        <td colspan=2>
+          {% if current_order_products %}
+            <a href="{% url 'shopping_cart:checkout' %}" class="pull-right btn btn-primary">Proceed To Checkout</a>
+          {% endif %}
+        </td>
+      </tr>
+    </table>
+{% endblock %}
